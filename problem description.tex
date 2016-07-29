@@ -1,0 +1,82 @@
+\documentclass{article}
+
+\usepackage{bm}
+
+\title{Description of a Reactionless Trajectory Planning Problem}
+
+\author{
+	Xiao Feng
+	\thanks{Ph.D candidate, School of Astronautics, fengxiao@buaa.edu.cn}\\
+	{\normalsize\itshape
+		Beihang University, Beijing, 100191, China}\\
+}
+
+\begin{document}
+	\maketitle
+
+\section{Problem Description}
+Recently I have been trying to solve the problem of planning a joint trajectory(time history) for a space robot's manipulator, which maneuver the manipulator from its initial configuration to a desired one(or desired end effector pose wrt the base) while not disturbing the base attitude(or at least minimizing the disturbance).
+\section{Assumptions and Formulation}
+The system under consideration is a space robot comprises a spacecraft platform(base) and a mounted manipulator(eg.ETS-VII, Orbital Express). The following assumptions are made.
+\begin{enumerate}
+	\item The space robot is free floating(base position and orientation left uncontrolled).
+	\item No external force or torque.
+	\item Initial linear and angular momentum are zero.
+\end{enumerate}
+These assumptions lead to the angular momentum(wrt base CM) conservation law
+\begin{equation}
+\tilde{\bm{H}}_b(\bm{\phi})\bm{\omega}_b + \tilde{\bm{H}}_{bm}(\bm{\phi})\dot{\bm{\phi}} = \bm{0}
+\end{equation} 
+ 
+The trajectory planning problem is characterised by the following constraints.
+\begin{enumerate}
+	\item The trajectory starts from the current configuration of the manipulator $\bm{\phi}_0$, the end is given as either a desired configuration $\bm{\phi}_f$ or a desired end effecotr pose $\bm{X}_f$.
+	\item The base orientation remain fixed during the manipulation. As $\tilde{\bm{H}}_b$ is invertible, this constrain is equivalent to 
+	\begin{equation}
+		\tilde{\bm{H}}_{bm}(\bm{\phi})\dot{\bm{\phi}} = \bm{0}
+	\end{equation}
+	(or at least minimize the left-hand-side term)
+	\item The duration of motion is constrained by 
+	\begin{equation}
+		0 < T \le T_{\mathrm{max}}
+	\end{equation}
+	\item Joint limit ($i = 1,2,...,n$, $n$ is the dof of the manipulator)
+	\begin{equation}
+		\phi^i_{\mathrm{min}} \le \phi^i \le \phi^i_{\mathrm{min}}
+	\end{equation}
+	\item Joint rate limit ($i = 1,2,...,n$)
+		\begin{equation}
+		\dot{\phi}^i_{\mathrm{min}} \le \dot{\phi}^i \le \dot{\phi}^i_{\mathrm{min}}
+		\end{equation}
+	\item The trajectory should be smooth.
+\end{enumerate}
+
+\section{Method Tried}
+	I have tried to formulate the problem as an optimal control problem. That is 
+	\begin{equation}
+	\label{e:min}
+		\min\int\limits_0^T||(\tilde{\bm{H}}_{bm}(\bm{\phi})\bm{u})||^2\mathrm{d}t
+	\end{equation}
+	subject to
+	\begin{equation}
+		\dot{\bm{\phi}} = \bm{u}
+	\end{equation}
+	
+	\begin{equation}
+	\begin{array}{rl}
+		\bm{\phi}(0) = \bm{\phi}_0 & \bm{\phi}(T) = \bm{\phi}_f
+	\end{array}	
+	\end{equation}
+	\begin{equation}
+		0 < T \le T_{\mathrm{max}}
+	\end{equation}
+	\begin{equation}
+		\phi^i_{\mathrm{min}} \le \phi^i \le \phi^i_{\mathrm{min}}
+	\end{equation}
+	\begin{equation}
+		\dot{\phi}^i_{\mathrm{min}} \le {u}^i \le \dot{\phi}^i_{\mathrm{min}}
+	\end{equation}
+where joint rates are seen as control inputs, and the end point is given as desired configuration since desired end effector pose can be converted through inverse kinematics.
+
+The code GPOPS(General Pseudospectral Optimal Control Software) is used to solve the problem, but until now it failed to give satisfactory results.
+\end{document}
