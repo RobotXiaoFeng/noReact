@@ -11,24 +11,33 @@
 		Beihang University, Beijing, 100191, China}\\
 }
 
+\bibliographystyle{plain}
+
 \begin{document}
 	\maketitle
 
 \section{Problem Description}
 Recently I have been trying to solve the problem of planning a joint trajectory(time history) for a space robot's manipulator, which maneuver the manipulator from its initial configuration to a desired one(or desired end effector pose wrt the base) while not disturbing the base attitude(or at least minimizing the disturbance).
+
 \section{Assumptions and Formulation}
 The system under consideration is a space robot comprises a spacecraft platform(base) and a mounted manipulator(eg.ETS-VII, Orbital Express). The following assumptions are made.
+
 \begin{enumerate}
 	\item The space robot is free floating(base position and orientation left uncontrolled).
 	\item No external force or torque.
 	\item Initial linear and angular momentum are zero.
 \end{enumerate}
+
 These assumptions lead to the angular momentum(wrt base CM) conservation law
 \begin{equation}
+\label{e:momentum}
 \tilde{\bm{H}}_b(\bm{\phi})\bm{\omega}_b + \tilde{\bm{H}}_{bm}(\bm{\phi})\dot{\bm{\phi}} = \bm{0}
 \end{equation} 
+where $\bm{\omega}_b$ is the angular velocity of the base, $\bm{\phi}$ is a vector of manipulator joint angles, $\tilde{\bm{H}}_b$ and $\tilde{\bm{H}}_{bm}$ are called base inertia and coupling inertia
+matrices, respectively. More details of Eq.~\ref{e:momentum} can be found in \cite{dimitrov2006dynamics}. 
  
 The trajectory planning problem is characterised by the following constraints.
+
 \begin{enumerate}
 	\item The trajectory starts from the current configuration of the manipulator $\bm{\phi}_0$, the end is given as either a desired configuration $\bm{\phi}_f$ or a desired end effecotr pose $\bm{X}_f$.
 	\item The base orientation remain fixed during the manipulation. As $\tilde{\bm{H}}_b$ is invertible, this constrain is equivalent to 
@@ -52,7 +61,7 @@ The trajectory planning problem is characterised by the following constraints.
 \end{enumerate}
 
 \section{Method Tried}
-	I have tried to formulate the problem as an optimal control problem. That is 
+I have tried to formulate the problem as an optimal control problem. That is 
 	\begin{equation}
 	\label{e:min}
 		\min\int\limits_0^T||(\tilde{\bm{H}}_{bm}(\bm{\phi})\bm{u})||^2\mathrm{d}t
@@ -79,4 +88,8 @@ The trajectory planning problem is characterised by the following constraints.
 where joint rates are seen as control inputs, and the end point is given as desired configuration since desired end effector pose can be converted through inverse kinematics.
 
 The code GPOPS(General Pseudospectral Optimal Control Software) is used to solve the problem, but until now it failed to give satisfactory results.
+
+
+\bibliography{reference}
+
 \end{document}
