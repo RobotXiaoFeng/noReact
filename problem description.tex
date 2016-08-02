@@ -51,11 +51,11 @@ The trajectory planning problem is characterised by the following constraints.
 	\end{equation}
 	\item Joint limit ($i = 1,2,...,n$, $n$ is the dof of the manipulator)
 	\begin{equation}
-		\phi^i_{\mathrm{min}} \le \phi^i \le \phi^i_{\mathrm{min}}
+		\phi^i_{\mathrm{min}} \le \phi^i \le \phi^i_{\mathrm{max}}
 	\end{equation}
 	\item Joint rate limit ($i = 1,2,...,n$)
 		\begin{equation}
-		\dot{\phi}^i_{\mathrm{min}} \le \dot{\phi}^i \le \dot{\phi}^i_{\mathrm{min}}
+		\dot{\phi}^i_{\mathrm{min}} \le \dot{\phi}^i \le \dot{\phi}^i_{\mathrm{max}}
 		\end{equation}
 	\item The trajectory should be smooth.
 \end{enumerate}
